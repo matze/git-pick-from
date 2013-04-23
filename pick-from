@@ -1,0 +1,97 @@
+#!/usr/bin/env python
+
+import sys
+import subprocess as subp
+import urwid
+
+
+def current_directory_git_repo():
+    cmd = 'git status'.split()
+    ret = subp.call(cmd, stdout=subp.PIPE, stderr=subp.PIPE)
+    return ret == 0
+
+
+def git_branch(branch):
+    cmd = 'git show-ref --verify --quiet refs/heads/{0}'.format(branch).split()
+    return subp.call(cmd) == 0
+
+
+def get_commits(branch):
+    cmd = 'git log {0} ^HEAD --no-merges --oneline'.format(branch).split()
+    proc = subp.Popen(cmd, stdout=subp.PIPE, stderr=subp.PIPE)
+    out = proc.communicate()[0]
+    lines = out.rstrip().split('\n')
+
+    def split_head(s):
+        split = s.split()
+        return (split[0], ' '.join(split[1:]))
+
+    return [split_head(s) for s in lines if s != '']
+
+
+def cherry_pick(commits):
+    if commits:
+        cmd = 'git cherry-pick'.split()
+        cmd.extend(commits)
+        subp.call(cmd)
+    else:
+        print("No commits picked")
+
+
+class Application(object):
+    def __init__(self, commits):
+        self.picked = []
+        self.commits = commits
+
+    def run(self):
+        loop = urwid.MainLoop(self.get_commit_list_box(),
+                              unhandled_input=self.handle_input)
+        loop.run()
+
+    def get_commit_list_box(self):
+        body = [urwid.Text(u"Choose commits to cherry-pick and accept with `q'"),
+                urwid.Divider()]
+
+        for commit, message in self.commits:
+            box = urwid.CheckBox(u'{0}: {1}'.format(commit, message))
+            urwid.connect_signal(box, 'change', self.commit_chosen, commit)
+            body.append(urwid.AttrMap(box, None, focus_map='reversed'))
+
+        return urwid.ListBox(urwid.SimpleListWalker(body))
+
+    def commit_chosen(self, button, checked, commit):
+        if checked:
+            self.picked.append(commit)
+        else:
+            self.picked.remove(commit)
+
+    def handle_input(self, key):
+        if key in ('q', 'Q'):
+            raise urwid.ExitMainLoop()
+
+
+if __name__ == '__main__':
+    if not current_directory_git_repo():
+        print("Current directory is not a Git repository")
+        sys.exit(1)
+
+    if len(sys.argv) < 2:
+        print("No branch to cherry pick from is given")
+        sys.exit(1)
+
+    branch = sys.argv[1]
+
+    if not git_branch(branch):
+        print("{0} is not a valid branch".format(branch))
+        sys.exit(1)
+
+    commits = get_commits(branch)
+
+    if not commits:
+        print("No commits to pick found")
+        sys.exit(0)
+
+    app = Application(commits)
+    app.run()
+
+    cherry_pick(app.picked)
