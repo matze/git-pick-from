@@ -6,7 +6,6 @@ import urwid
 
 
 def silent_call(cmd_list):
-    print("call {0}".format(str(cmd_list)))
     return subp.call(cmd_list, stdout=subp.PIPE, stderr=subp.PIPE)
 
 
@@ -48,7 +47,8 @@ class Application(object):
         self.commits = commits
 
     def run(self):
-        loop = urwid.MainLoop(self.get_commit_list_box(),
+        self.commit_box = self.get_commit_list_box()
+        loop = urwid.MainLoop(self.commit_box,
                               unhandled_input=self.handle_input)
         loop.run()
 
@@ -66,6 +66,8 @@ class Application(object):
     def commit_chosen(self, button, checked, commit):
         if checked:
             self.picked.append(commit)
+            widget, position = self.commit_box.get_focus()
+            self.commit_box.set_focus(position + 1)
         else:
             self.picked.remove(commit)
 
