@@ -78,24 +78,20 @@ class Application(object):
 
 if __name__ == '__main__':
     if not current_directory_git_repo():
-        print("Current directory is not a Git repository")
-        sys.exit(1)
+        sys.exit("Current directory is not a Git repository")
 
     if len(sys.argv) < 2:
-        print("No branch to cherry pick from is given")
-        sys.exit(1)
+        sys.exit("No branch to cherry pick from is given")
 
     branch = sys.argv[1]
 
     if not git_branch(branch):
-        print("{0} is not a valid branch".format(branch))
-        sys.exit(1)
+        sys.exit("{0} is not a valid branch".format(branch))
 
     commits = get_commits(branch)
 
     if not commits:
-        print("No commits to pick found")
-        sys.exit(0)
+        sys.exit("No commits to pick found")
 
     app = Application(commits)
     app.run()
