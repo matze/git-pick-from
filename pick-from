@@ -5,15 +5,19 @@ import subprocess as subp
 import urwid
 
 
+def silent_call(cmd_list):
+    print("call {0}".format(str(cmd_list)))
+    return subp.call(cmd_list, stdout=subp.PIPE, stderr=subp.PIPE)
+
+
 def current_directory_git_repo():
     cmd = 'git status'.split()
-    ret = subp.call(cmd, stdout=subp.PIPE, stderr=subp.PIPE)
-    return ret == 0
+    return silent_call(cmd) == 0
 
 
 def git_branch(branch):
     cmd = 'git show-ref --verify --quiet refs/heads/{0}'.format(branch).split()
-    return subp.call(cmd) == 0
+    return silent_call(cmd) == 0
 
 
 def get_commits(branch):
@@ -32,7 +36,10 @@ def get_commits(branch):
 def cherry_pick(commits):
     for commit in reversed(commits):
         cmd = 'git cherry-pick {0}'.format(commit).split()
-        subp.call(cmd)
+        if silent_call(cmd) == 0:
+            print("Picked {0} successfully".format(commit))
+        else:
+            return
 
 
 class Application(object):
