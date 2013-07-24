@@ -17,6 +17,7 @@ setup(
     version=VERSION,
     author='Matthias Vogelgesang',
     author_email='matthias.vogelgesang@gmail.com',
+    url='https://github.com/matze/git-pick-from',
     license='BSD',
     scripts=['pick-from'],
     data_files=data_files,
