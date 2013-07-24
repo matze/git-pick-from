@@ -13,7 +13,7 @@ else:
 
 
 setup(
-    name='pick-from',
+    name='git-pick-from',
     version=VERSION,
     author='Matthias Vogelgesang',
     author_email='matthias.vogelgesang@gmail.com',
