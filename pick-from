@@ -30,12 +30,9 @@ def get_commits(branch):
 
 
 def cherry_pick(commits):
-    if commits:
-        cmd = 'git cherry-pick'.split()
-        cmd.extend(commits)
+    for commit in reversed(commits):
+        cmd = 'git cherry-pick {0}'.format(commit).split()
         subp.call(cmd)
-    else:
-        print("No commits picked")
 
 
 class Application(object):
