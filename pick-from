@@ -38,7 +38,8 @@ def cherry_pick(commits):
         if silent_call(cmd) == 0:
             print("Picked {0} successfully".format(commit))
         else:
-            return
+            sys.exit("Could not pick {0}. Fix change and commit with `git "
+                     "commit -c {0}' to keep authorship.".format(commit))
 
 
 class Application(object):
