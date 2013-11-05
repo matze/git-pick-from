@@ -2,7 +2,7 @@ import os
 from setuptools import setup
 
 
-VERSION='1.0.1dev'
+VERSION='1.0.1'
 
 
 # Install Bash completion script only if installation is run as root
