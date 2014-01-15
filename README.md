@@ -1,9 +1,9 @@
 # About
 
-`pick-from` is a text user interface for the Git cherry pick command. Given a
+`git-pick` is a text user interface for the Git cherry pick command. Given a
 branch name on the command line
 
-    $ pick-from <branch>
+    $ git pick <branch>
 
 it will show a list of commits differing between the `HEAD` and the given
 branch:
@@ -19,7 +19,8 @@ to `git cherry-pick` command.
 
 ## Installation
 
-Install [urwid][] and put the script into your `$PATH`. That's it.
+`git-pick` requires [urwid][] and can be installed by either running `python
+setup.py install` or and putting the script into your `$PATH`.
 
 
 [urwid]: http://excess.org/urwid/

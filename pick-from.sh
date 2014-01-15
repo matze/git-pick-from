@@ -8,4 +8,4 @@ _pick_from()
     return 0
 }
 
-complete -F _pick_from pick-from
+complete -F _pick_from pick

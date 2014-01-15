@@ -19,7 +19,7 @@ setup(
     author_email='matthias.vogelgesang@gmail.com',
     url='https://github.com/matze/git-pick-from',
     license='BSD',
-    scripts=['pick-from'],
+    scripts=['git-pick'],
     data_files=data_files,
     description="Text user interface for git cherry-pick",
     long_description=open('README.md').read(),
