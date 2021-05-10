@@ -1,4 +1,9 @@
-# About
+**THIS REPO IS ARCHIVED. PLEASE GO [HERE](https://github.com/matze/git-utils) FOR
+A RUSTY REPLACEMENT.**
+
+---
+
+## About
 
 `git-pick` is a text user interface for the Git cherry pick command. Given a
 branch name on the command line
@@ -17,7 +22,7 @@ Commits can be picked with <kbd>Enter</kbd> and will be passed unconditionally
 to `git cherry-pick` command. 
 
 
-## Installation
+### Installation
 
 `git-pick` requires [urwid][] and can be installed by either running `python
 setup.py install` or and putting the script into your `$PATH`.
